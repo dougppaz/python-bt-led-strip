@@ -12,6 +12,7 @@ bleak = "*"
 [dev-packages]
 pylint = "*"
 sphinx = "*"
+myst-parser = "*"
 
 [requires]
 python_version = "3.12"

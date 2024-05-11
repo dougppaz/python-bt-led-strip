@@ -1,0 +1,2 @@
+.. automodule:: btledstrip
+   :members:
