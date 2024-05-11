@@ -1,0 +1,22 @@
+[project]
+name = "btledstrip"
+version = "0.1.0"
+authors = [
+    { name="Douglas Paz", email="eu@douglaspaz.com" },
+]
+description = "Python LED Strip Bluetooth Controller API"
+readme = "README.md"
+requires-python = ">=3.12"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/dougppaz/python-bt-led-strip"
+Issues = "https://github.com/dougppaz/python-bt-led-strip/issues"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
