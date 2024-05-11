@@ -13,6 +13,7 @@ bleak = "*"
 pylint = "*"
 sphinx = "*"
 myst-parser = "*"
+sphinx-rtd-theme = "*"
 
 [requires]
 python_version = "3.12"

@@ -4,21 +4,20 @@
    contain the root `toctree` directive.
 
 Documentation
-=========================================
+=============
+
 
 Usage
------
+=====
 
 .. include:: usage.md
    :parser: myst_parser.sphinx_
 
 API
----
+===
 
-.. toctree::
-   :maxdepth: 1
-
-   api
+.. automodule:: btledstrip
+   :members:
 
 Indices and tables
 ==================
