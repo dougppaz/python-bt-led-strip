@@ -7,17 +7,15 @@ from .consts import (
     EXEC_PREFIX,
     COMMAND_PREFIX,
 )
-from .controllers import (
-    BaseController,
-    MELKController,
-)
+from .controllers import MELKController
 
 class BTLedStrip:
     """
-    BTLedStrip class
+    Create an object by passing the controller and its settings along with the bluethooth MAC
+    address to control the LED strips.
     """
     def __init__(self,
-                 controller: BaseController,
+                 controller: MELKController,
                  mac_address: str) -> None:
         self._controller = controller
         self._bt_client = BleakClient(mac_address)
