@@ -2,7 +2,7 @@
 controllers
 
 supported controllers:
-- MELK
+- MELK: MELKController
 
 inspired by:
 - https://github.com/dave-code-ruiz/elkbledom/blob/main/custom_components/elkbledom/elkbledom.py
@@ -45,9 +45,9 @@ class MELKController(BaseController):  # pylint: disable=R0903
 
     Implements:
 
-    - BTLedStrip.command_turn_on()
-    - BTLedStrip.command_turn_off()
-    - BTLedStrip.command_brightness(percentage: int)
+    - BTLedStrip.exec_turn_on()
+    - BTLedStrip.exec_turn_off()
+    - BTLedStrip.exec_brightness(percentage: int)
     """
     _char_specifier = "0000fff3-0000-1000-8000-00805f9b34fb"
     _command_turn_on = [0x7e, 0x00, 0x04, 0x01, 0x00, 0x00, 0x00, 0x00, 0xef]
