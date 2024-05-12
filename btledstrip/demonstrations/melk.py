@@ -1,3 +1,6 @@
+"""
+melk demonstration
+"""
 import argparse
 import asyncio
 import time
@@ -7,6 +10,9 @@ from btledstrip import (
 )
 
 async def main(mac_address: str = None) -> None:
+    """
+    run demonstration
+    """
     assert mac_address
     controller = MELKController()
     async with BTLedStrip(controller, mac_address) as led_strip:
