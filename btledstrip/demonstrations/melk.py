@@ -1,6 +1,7 @@
 """
 melk demonstration
 """
+import logging
 import argparse
 import asyncio
 import time
@@ -38,6 +39,7 @@ async def main(mac_address: str = None) -> None:
             time.sleep(1)
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
     parser = argparse.ArgumentParser(prog='MELK Example')
     parser.add_argument('mac_address')
     args = parser.parse_args()
