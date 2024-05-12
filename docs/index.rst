@@ -13,6 +13,15 @@ Supported controllers/devices
 
 - MELK: :class:`MELKController<btledstrip.MELKController>`
 
+Install
+=======
+
+Install from Pypi repository.
+
+.. code-block:: console
+
+   pip install btledstrip
+
 Usage
 =====
 
