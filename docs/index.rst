@@ -41,6 +41,17 @@ MELK:
 
    python -m btledstrip.demonstrations.melk -h
 
+Dev Command Terminal
+====================
+
+Debug a controller sending programmatically commands via Bluetooth.
+
+Usage:
+
+.. code-block:: console
+
+   python -m btledstrip.dev -h
+
 API
 ===
 
