@@ -10,7 +10,7 @@ from .consts import (
 )
 from .controllers import MELKController
 
-logger = logging.getLogger()
+logger = logging.getLogger(__name__)
 
 class BTLedStrip:
     """
