@@ -12,6 +12,7 @@ from typing import (
     Any,
     List,
 )
+import datetime
 from .consts import COMMAND_PREFIX
 
 class BaseController:
@@ -39,6 +40,12 @@ class BaseController:
             return getattr(self, f"_{COMMAND_PREFIX}{act}")
         return command_wrapper
 
+    def init_commands(self) -> List[List[bytes]]:
+        """
+        init commands
+        """
+        return []
+
 class MELKController(BaseController):  # pylint: disable=R0903
     """
     MELK controller devices
@@ -55,6 +62,15 @@ class MELKController(BaseController):  # pylint: disable=R0903
     _char_specifier = "0000fff3-0000-1000-8000-00805f9b34fb"
     _command_turn_on = [0x7e, 0x00, 0x04, 0x01, 0x00, 0x00, 0x00, 0x00, 0xef]
     _command_turn_off = [0x7e, 0x00, 0x04, 0x00, 0x00, 0x00, 0xff, 0x00, 0xef]
+
+    def init_commands(self) -> List[List[bytes]]:
+        date = datetime.date.today()
+        now = datetime.datetime.now()
+        _, _, day_of_week = date.isocalendar()
+        return [[0x7e, 0x07, 0x83],
+                [0x7e, 0x04, 0x04],
+                [0x7e, 0x00, 0x83, int(now.strftime('%H')), int(now.strftime('%M')),
+                 int(now.strftime('%S')), day_of_week, 0x00, 0xef]]
 
     def _brightness(self, percentage: int = 0) -> List[bytes]:
         """
