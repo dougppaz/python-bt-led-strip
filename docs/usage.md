@@ -6,11 +6,9 @@ from btledstrip import (
 
 mac_address = "00:00:00:00:00:00"
 controller = MELKController()
-led_strip = BTLedStrip(controller, mac_address)
-
-# turn on
-await led_strip.exec_turn_on()
-
-# turn off
-await led_strip.exec_turn_off()
+async with BTLedStrip(controller, mac_address) as led_strip:
+    # turn on
+    await led_strip.exec_turn_on()
+    # turn off
+    await led_strip.exec_turn_off()
 ```
