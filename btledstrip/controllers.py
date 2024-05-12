@@ -49,6 +49,8 @@ class MELKController(BaseController):  # pylint: disable=R0903
     - BTLedStrip.exec_turn_off()
     - BTLedStrip.exec_brightness(percentage: int)
     - BTLedStrip.exec_color(red: int, green: int, blue: int)
+    - BTLedStrip.exec_white(temperature: int)
+    - BTLedStrip.exec_white_brightness(percentage: int)
     """
     _char_specifier = "0000fff3-0000-1000-8000-00805f9b34fb"
     _command_turn_on = [0x7e, 0x00, 0x04, 0x01, 0x00, 0x00, 0x00, 0x00, 0xef]
@@ -69,3 +71,18 @@ class MELKController(BaseController):  # pylint: disable=R0903
         g = int(green * 255 / 100)
         b = int(blue * 255 / 100)
         return [0x7e, 0x00, 0x05, 0x03, r, g, b, 0x00, 0xef]
+
+    def _white(self, temperature: int = 0) -> List[bytes]:
+        """
+        set white temperature
+        """
+        w = int(temperature * 255 / 100)
+        c = 255 - w
+        return [0x7e, 0x00, 0x05, 0x02, w, c, 0x00, 0x00, 0xef]
+
+    def _white_brightness(self, percentage: int = 0) -> List[bytes]:
+        """
+        set white brightness
+        """
+        b = int(percentage * 255 / 100)
+        return [0x7e, 0x00, 0x01, b, 0x00, 0x00, 0x00, 0x00, 0xef]
