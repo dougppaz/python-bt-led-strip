@@ -6,6 +6,12 @@
 Documentation
 =============
 
+Python LED Strip Bluetooth Controller API was created by `Douglas Paz <https://www.douglaspaz.com/>`_ implemented with `bleak <https://github.com/hbldh/bleak>`_.
+
+Supported controllers/devices
+=============================
+
+- MELK: :class:`MELKController<btledstrip.MELKController>`
 
 Usage
 =====
