@@ -48,6 +48,7 @@ class MELKController(BaseController):  # pylint: disable=R0903
     - BTLedStrip.exec_turn_on()
     - BTLedStrip.exec_turn_off()
     - BTLedStrip.exec_brightness(percentage: int)
+    - BTLedStrip.exec_color(red: int, green: int, blue: int)
     """
     _char_specifier = "0000fff3-0000-1000-8000-00805f9b34fb"
     _command_turn_on = [0x7e, 0x00, 0x04, 0x01, 0x00, 0x00, 0x00, 0x00, 0xef]
@@ -59,3 +60,12 @@ class MELKController(BaseController):  # pylint: disable=R0903
         """
         command_value = int(percentage * 100 / 255)
         return [0x7e, 0x04, 0x01, command_value, 0xff, 0x00, 0xff, 0x00, 0xef]
+
+    def _color(self, red: int = 0, green: int = 0, blue: int = 0) -> List[bytes]:
+        """
+        set color
+        """
+        r = int(red * 100 / 255)
+        g = int(green * 100 / 255)
+        b = int(blue * 100 / 255)
+        return [0x7e, 0x00, 0x05, 0x03, r, g, b, 0x00, 0xef]
