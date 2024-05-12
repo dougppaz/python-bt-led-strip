@@ -30,12 +30,19 @@ class BTLedStrip:
         await self._bt_client.__aexit__(*args)
         self._bt_client = None
 
+    @property
+    def bt_client(self) -> BleakClient:
+        """
+        bleak client
+        """
+        assert self._bt_client
+        return self._bt_client
+
     async def get_model_number(self) -> str:
         """
         get model number
         """
-        assert self._bt_client
-        model_number = await self._bt_client.read_gatt_char(self._controller.char_specifier)
+        model_number = await self.bt_client.read_gatt_char(self._controller.char_specifier)
         return model_number
 
     def __getattribute__(self, name: str) -> Any:
@@ -44,8 +51,7 @@ class BTLedStrip:
         act = name.removeprefix(EXEC_PREFIX)
         command = getattr(self._controller, f"{COMMAND_PREFIX}{act}")
         async def command_wrapper(**kwargs):
-            assert self._bt_client
-            await self._bt_client.write_gatt_char(
+            await self.bt_client.write_gatt_char(
                 self._controller.char_specifier,
                 bytearray(command(**kwargs))
             )
