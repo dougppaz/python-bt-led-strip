@@ -19,6 +19,16 @@ Usage
 .. include:: usage.md
    :parser: myst_parser.sphinx_
 
+Demonstrations
+==============
+
+MELK:
+-----
+
+.. code-block:: console
+
+   python -m btledstrip.demonstrations.melk -h
+
 API
 ===
 
