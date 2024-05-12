@@ -31,7 +31,7 @@ class BTLedStrip:
     def __getattribute__(self, name: str) -> Any:
         if not name.startswith(EXEC_PREFIX):
             return super().__getattribute__(name)
-        act = name.lstrip(EXEC_PREFIX)
+        act = name.removeprefix(EXEC_PREFIX)
         command = getattr(self._controller, f"{COMMAND_PREFIX}{act}")
         async def command_wrapper(**kwargs):
             async with self._bt_client as bt_client:

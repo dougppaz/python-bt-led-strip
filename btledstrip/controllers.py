@@ -31,7 +31,7 @@ class BaseController:
     def __getattribute__(self, name: str) -> Any:
         if not name.startswith(COMMAND_PREFIX):
             return super().__getattribute__(name)
-        act = name.lstrip(COMMAND_PREFIX)
+        act = name.removeprefix(COMMAND_PREFIX)
         command_fn = getattr(self, f"_{act}", None)
         if command_fn:
             return command_fn
