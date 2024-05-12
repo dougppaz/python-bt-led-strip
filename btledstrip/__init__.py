@@ -122,3 +122,5 @@ __all__ = [
     "MELKController",
     "Command",
 ]
+
+VERSION = "0.1.0"
