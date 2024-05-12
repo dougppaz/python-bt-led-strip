@@ -12,7 +12,6 @@ bleak = "*"
 [dev-packages]
 pylint = "*"
 sphinx = "*"
-myst-parser = "*"
 sphinx-rtd-theme = "*"
 
 [requires]

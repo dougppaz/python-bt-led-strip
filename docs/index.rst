@@ -16,8 +16,20 @@ Supported controllers/devices
 Usage
 =====
 
-.. include:: usage.md
-   :parser: myst_parser.sphinx_
+.. code-block:: python
+
+   from btledstrip import (
+       BTLedStrip,
+       MELKController,
+   )
+
+   mac_address = "00:00:00:00:00:00"
+   controller = MELKController()
+   async with BTLedStrip(controller, mac_address) as led_strip:
+       # turn on
+       await led_strip.exec.turn_on()
+       # turn off
+       await led_strip.exec.turn_off()
 
 Demonstrations
 ==============

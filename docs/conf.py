@@ -7,7 +7,6 @@ copyright = "2024, Douglas Paz"
 author = "Douglas Paz"
 
 extensions = [
-    "myst_parser",
     "sphinx.ext.autodoc",
     "sphinx_rtd_theme",
 ]

@@ -3,32 +3,58 @@ btledstrip module
 """
 import logging
 import asyncio
-from typing import Any
+from typing import (
+    Callable,
+    Awaitable,
+    Optional,
+    Any,
+)
 from bleak import BleakClient
-from .consts import (
-    EXEC_PREFIX,
+from bleak.backends.characteristic import BleakGATTCharacteristic
+from .controllers import (
+    Controller,
+    MELKController,
     COMMAND_PREFIX,
 )
-from .controllers import MELKController
+from .typing import Command
 
 logger = logging.getLogger(__name__)
+
+class BTLedStripExec:  # pylint: disable=R0903
+    """
+    build BTLedStrip.exec
+    """
+    def __init__(self, bt_led_strip: "BTLedStrip") -> None:
+        self._bt_led_strip = bt_led_strip
+
+    def __getattr__(self, name: str) -> Callable[..., Awaitable[None]]:
+        command_fn = getattr(self._bt_led_strip.controller, f"{COMMAND_PREFIX}{name}")
+        assert command_fn
+        async def command_wrapper(**kwargs):
+            command = command_fn(**kwargs)
+            await self._bt_led_strip.send_command(command)
+            logger.info("exec %s %s successfully executed", name, kwargs)
+        return command_wrapper
 
 class BTLedStrip:
     """
     Create an object by passing the controller and its settings along with the bluethooth MAC
-    address to control the LED strips.
+    address to control the LED strip.
     """
+    exec: BTLedStripExec
+
     def __init__(self,
-                 controller: MELKController,
+                 controller: Controller,
                  mac_address: str) -> None:
         self._controller = controller
-        self._bt_client = None
+        self._bt_client: Optional[BleakClient] = None
         self._characteristic = None
-        self.mac_address = mac_address
+        self._mac_address = mac_address
+        self.exec = BTLedStripExec(self)
 
-    async def __aenter__(self) -> 'BTLedStrip':
-        self._bt_client = BleakClient(self.mac_address)
-        await self._bt_client.__aenter__()
+    async def __aenter__(self) -> "BTLedStrip":
+        self._bt_client = BleakClient(self._mac_address)
+        await self.bt_client.__aenter__()
         for command in self._controller.init_commands():
             logger.info("%s send init command %s", self, command)
             await self.bt_client.write_gatt_char(
@@ -40,11 +66,18 @@ class BTLedStrip:
         logger.info("BTLedStrip context created %s", self)
         return self
 
-    async def __aexit__(self, *args) -> None:
-        await self._bt_client.__aexit__(*args)
+    async def __aexit__(self, *args: Any) -> None:
+        await self.bt_client.__aexit__(*args)
         self._bt_client = None
         self._characteristic = None
         logger.info("BTLedStrip context destroyed %s", self)
+
+    @property
+    def controller(self) -> Controller:
+        """
+        controller
+        """
+        return self._controller
 
     @property
     def bt_client(self) -> BleakClient:
@@ -55,7 +88,7 @@ class BTLedStrip:
         return self._bt_client
 
     @property
-    def characteristic(self):
+    def characteristic(self) -> BleakGATTCharacteristic:
         """
         write characteristic
         """
@@ -64,23 +97,28 @@ class BTLedStrip:
                 self._controller.char_specifier)
         return self._characteristic
 
-    def __getattribute__(self, name: str) -> Any:
-        if not name.startswith(EXEC_PREFIX):
-            return super().__getattribute__(name)
-        act = name.removeprefix(EXEC_PREFIX)
-        command_fn = getattr(self._controller, f"{COMMAND_PREFIX}{act}")
-        async def command_wrapper(**kwargs):
-            command = command_fn(**kwargs)
-            logger.debug("exec %s %s command: %s", act, kwargs, command)
-            await self.bt_client.write_gatt_char(
-                self.characteristic,
-                bytearray(command),
-                False
-            )
-            logger.info("exec %s %s successfully executed", act, kwargs)
-        return command_wrapper
+    async def send_command(self, command: Command):
+        """
+        send command via bluetooth
+        """
+        logger.debug("request %s write command: %s", self.bt_client, command)
+        await self.bt_client.write_gatt_char(
+            self.characteristic,
+            bytearray(command),
+            False
+        )
+
+    async def exec_command(self, *args: int) -> None:
+        """
+        exec command
+        """
+        command = self._controller.build_command(*args)
+        await self.send_command(command)
+        logger.info("command successfully executed: %s", args)
 
 __all__ = [
     "BTLedStrip",
+    "Controller",
     "MELKController",
+    "Command",
 ]
