@@ -19,6 +19,7 @@ classifiers = [
 
 [project.urls]
 Homepage = "https://github.com/dougppaz/python-bt-led-strip"
+Documentation = "https://python-bt-led-strip.readthedocs.io/en/latest/"
 Issues = "https://github.com/dougppaz/python-bt-led-strip/issues"
 
 [build-system]
