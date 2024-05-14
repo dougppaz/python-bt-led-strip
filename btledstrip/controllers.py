@@ -46,7 +46,7 @@ class Controller:
 
     def __getattr__(self, name: str) -> Any:
         if not name.startswith(COMMAND_PREFIX):
-            return super().__getattr__(name)
+            raise AttributeError()
         act = name.removeprefix(COMMAND_PREFIX)
         command_fn = getattr(self, f"_{act}", None)
         if command_fn:
@@ -83,13 +83,8 @@ class MELKController(Controller):  # pylint: disable=R0903
                 [0x7e, 0x00, 0x83, int(now.strftime('%H')), int(now.strftime('%M')),
                  int(now.strftime('%S')), day_of_week, 0x00, 0xef]]
 
-    def build_command(self,  # pylint: disable=W0221,R0913
-                      arg_1: int,
-                      arg_2: int,
-                      arg_3: int,
-                      arg_4: int,
-                      arg_5: int,
-                      arg_6: int) -> Command:
+    def build_command(self, *args: int) -> Command:
+        arg_1, arg_2, arg_3, arg_4, arg_5, arg_6 = args
         return [0x7e, arg_1, arg_2, arg_3, arg_4, arg_5, arg_6, 0x00, 0xef]
 
     def _brightness(self, percentage: int = 0) -> Command:

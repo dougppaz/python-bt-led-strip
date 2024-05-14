@@ -48,7 +48,7 @@ class BTLedStrip:
                  mac_address: str) -> None:
         self._controller = controller
         self._bt_client: Optional[BleakClient] = None
-        self._characteristic = None
+        self._characteristic: Optional[BleakGATTCharacteristic] = None
         self._mac_address = mac_address
         self.exec = BTLedStripExec(self)
 
@@ -93,8 +93,9 @@ class BTLedStrip:
         write characteristic
         """
         if not self._characteristic:
-            self._characteristic = self._bt_client.services.get_characteristic(
+            self._characteristic = self.bt_client.services.get_characteristic(
                 self._controller.char_specifier)
+        assert self._characteristic
         return self._characteristic
 
     async def send_command(self, command: Command):
